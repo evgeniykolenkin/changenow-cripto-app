@@ -35,6 +35,7 @@
 }
 
 .exchange {
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -42,12 +43,15 @@
 }
 
 .exchange__item {
+  width: 100%;
   display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 5px;
   border: 1px solid #e3ebef;
   background-color: #f6f7f8;
-  height: 50px;
   padding: 14px;
+  height: 50px;
 }
 
 .exchange__item_common {
@@ -64,12 +68,11 @@
   width: 70%;
 }
 
-.exchange__item > select {
+.exchange__item > div {
   width: 30%;
-  outline: none;
-  cursor: pointer;
-  box-sizing: border-box;
 }
+
+/* buttons */
 
 .btn {
   border: none;
@@ -86,6 +89,100 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+}
+
+.select__button {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+  padding-right: 34px;
+  font-size: 16px;
+  font-weight: 400;
+  /* height: inherit; */
+  color: #282828;
+  background-color: #f6f7f8;
+  border-radius: 5px;
+  border: 1px solid #e3ebef;
+  border: none;
+  cursor: pointer;
+}
+
+.select__button::after {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  content: "";
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-width: 10.4px 6px 0 6px;
+  border-color: #798498 transparent transparent transparent;
+  border-style: solid;
+}
+
+.hidden {
+  display: none;
+}
+
+.select__options {
+  z-index: 1;
+  min-width: 250px;
+  position: absolute;
+  top: 15px;
+  right: -15px;
+  max-height: 250px;
+  overflow-y: auto;
+  margin-top: 5px;
+  padding: 0 8px;
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 23px;
+  color: #282828;
+  background-color: #f6f7f8;
+  border-radius: 5px;
+  border: 1px solid #e3ebef;
+}
+
+.search__select {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  border-radius: 5px;
+  background-color: #e3ebef;
+}
+
+.select__input {
+  border-radius: 5px;
+  background-color: #e3ebef;
+  border: none;
+  padding: 8px;
+  width: 100%;
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 23px;
+  color: #282828;
+  box-sizing: border-box;
+}
+
+.options__item {
+  margin-top: 5px;
+  padding: 4px;
+  color: #282828;
+  background-color: #fff;
+  border-radius: 5px;
+  border: 1px solid #e3ebef;
+  cursor: pointer;
+}
+
+.options__item:hover {
+  background-color: #11b3fe;
+  color: #fff;
 }
 
 .exchange__btn {

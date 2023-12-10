@@ -1,20 +1,32 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import swap from "../assets/swap.png";
 import styles from "./ChangeNow.module.css";
 import cn from "classnames";
+import { CiSearch } from "react-icons/ci";
 
 const API_KEY =
   "c9155859d90d239f909d2906233816b26cd8cf5ede44702d422667672b58b0cd";
 const API_URL = "https://changenow.io/api/v1";
 
 export const ChangeNow = () => {
+  // * for async requests
   const [currencies, setCurrencies] = useState([]);
-  const [leftCurrency, setLeftCurrency] = useState("");
-  const [rightCurrency, setRightCurrency] = useState("");
+  const [leftCurrencyTicker, setLeftCurrencyTicker] = useState("");
+  const [rightCurrencyTicker, setRightCurrencyTicker] = useState("");
   const [minimumAmount, setMinimumAmount] = useState(0);
   const [exchangeAmount, setExchangeAmount] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
+  // * for custon select
+  const [selectedLeftCurrency, setSelectedLeftCurrency] = useState("");
+  const [selectedRightCurrency, setSelectedRightCurrency] = useState("");
+  const [isLeftShowed, setIsLeftShowed] = useState(false);
+  const [isRightShowed, setIsRightShowed] = useState(false);
+  const [leftSearch, setLeftSearch] = useState("");
+  const [rightSearch, setRightSearch] = useState("");
+
+  const LeftSelectRef = useRef();
+  const RightSelectRef = useRef();
 
   useEffect(() => {
     const fetchCurrencies = async () => {
@@ -36,7 +48,7 @@ export const ChangeNow = () => {
     const fetchMinimumAmount = async () => {
       try {
         const response = await axios.get(
-          `${API_URL}/min-amount/${leftCurrency}_${rightCurrency}?api_key=${API_KEY}`
+          `${API_URL}/min-amount/${leftCurrencyTicker}_${rightCurrencyTicker}?api_key=${API_KEY}`
         );
         setMinimumAmount(response.data.minAmount);
         setErrorMessage("");
@@ -48,17 +60,17 @@ export const ChangeNow = () => {
       }
     };
 
-    if (leftCurrency && rightCurrency) {
+    if (leftCurrencyTicker && rightCurrencyTicker) {
       fetchMinimumAmount();
     }
-  }, [leftCurrency, rightCurrency]);
+  }, [leftCurrencyTicker, rightCurrencyTicker]);
 
   useEffect(() => {
     const fetchExchangeAmount = async () => {
-      if (leftCurrency && rightCurrency && minimumAmount) {
+      if (leftCurrencyTicker && rightCurrencyTicker && minimumAmount) {
         try {
           const response = await axios.get(
-            `${API_URL}/exchange-amount/${minimumAmount}/${leftCurrency}_${rightCurrency}/?api_key=${API_KEY}`
+            `${API_URL}/exchange-amount/${minimumAmount}/${leftCurrencyTicker}_${rightCurrencyTicker}/?api_key=${API_KEY}`
           );
           setExchangeAmount(response.data.estimatedAmount);
           setErrorMessage("");
@@ -74,19 +86,73 @@ export const ChangeNow = () => {
     };
 
     fetchExchangeAmount();
-  }, [leftCurrency, rightCurrency, minimumAmount]);
+  }, [leftCurrencyTicker, rightCurrencyTicker, minimumAmount]);
 
-  const handleLeftCurrencyChange = (event) => {
-    setLeftCurrency(event.target.value);
-  };
+  useEffect(() => {
+    const closeCustomSelect = (e) => {
+      if (!LeftSelectRef.current.contains(e.target)) {
+        setIsLeftShowed(false);
+      }
+    };
 
-  const handleRightCurrencyChange = (event) => {
-    setRightCurrency(event.target.value);
-  };
+    document.addEventListener("mousedown", closeCustomSelect);
+
+    return () => {
+      document.removeEventListener("mousedown", closeCustomSelect);
+    };
+  });
+
+  useEffect(() => {
+    const closeCustomSelect = (e) => {
+      if (!RightSelectRef.current.contains(e.target)) {
+        setIsRightShowed(false);
+      }
+    };
+
+    document.addEventListener("mousedown", closeCustomSelect);
+
+    return () => {
+      document.removeEventListener("mousedown", closeCustomSelect);
+    };
+  });
 
   const handleAmountChange = (event) => {
     const amount = parseFloat(event.target.value);
     setMinimumAmount(amount);
+  };
+
+  const handleLeftCurrencyChange = (e) => {
+    setLeftCurrencyTicker(e.target.id);
+    setSelectedLeftCurrency(e.target.dataset.name);
+    setIsLeftShowed((prev) => !prev);
+  };
+
+  const handleRightCurrencyChange = (e) => {
+    setRightCurrencyTicker(e.target.id);
+    setSelectedRightCurrency(e.target.dataset.name);
+    setIsRightShowed((prev) => !prev);
+  };
+
+  const openLeftSelectHandler = () => {
+    setIsLeftShowed((prev) => !prev);
+  };
+
+  const openRightSelectHandler = () => {
+    setIsRightShowed((prev) => !prev);
+  };
+
+  const leftSelectSearchHandler = (e) => {
+    const searchList = currencies.filter((currency) =>
+      currency.name.toLowerCase().includes(e.target.value.toLowerCase())
+    );
+    setLeftSearch(searchList);
+  };
+
+  const rightSelectSearchHandler = (e) => {
+    const searchList = currencies.filter((currency) =>
+      currency.name.toLowerCase().includes(e.target.value.toLowerCase())
+    );
+    setRightSearch(searchList);
   };
 
   return (
@@ -110,30 +176,74 @@ export const ChangeNow = () => {
             />
 
             {/* левая валюта */}
-            {leftCurrency && (
+            {leftCurrencyTicker && (
               <img
                 src={currencies
-                  .filter((item) => item.ticker === leftCurrency)
+                  .filter((item) => item.ticker === leftCurrencyTicker)
                   .map((item) => item.image)}
                 alt="currency-img"
               />
             )}
-            <select
-              className={styles.exchange__item_common}
-              value={leftCurrency}
-              onChange={handleLeftCurrencyChange}
-            >
-              <option value="">Сurrency</option>
-              {currencies.map((currency) => (
-                <option key={currency.ticker} value={currency.ticker}>
-                  {currency.name}
-                </option>
-              ))}
-            </select>
+
+            <div ref={LeftSelectRef}>
+              <button
+                title={
+                  selectedLeftCurrency
+                    ? selectedLeftCurrency
+                    : "click to choose"
+                }
+                onClick={openLeftSelectHandler}
+                style={{ width: "100%" }}
+                className={styles.select__button}
+              >
+                {selectedLeftCurrency ? selectedLeftCurrency : "Currency"}
+              </button>
+              <div style={{ position: "relative", width: "100%" }}>
+                <ul
+                  className={
+                    isLeftShowed ? styles.select__options : styles.hidden
+                  }
+                >
+                  <div className={styles.search__select}>
+                    <CiSearch size={25} color="#11b3fe" />
+                    <input
+                      placeholder="Search..."
+                      className={styles.select__input}
+                      onChange={leftSelectSearchHandler}
+                    />
+                  </div>
+                  {leftSearch
+                    ? leftSearch.map((currency) => (
+                        <li
+                          onClick={handleLeftCurrencyChange}
+                          key={currency.ticker}
+                          className={styles.options__item}
+                          id={currency.ticker}
+                          data-name={currency.name}
+                        >
+                          {currency.name}
+                        </li>
+                      ))
+                    : currencies.map((currency) => (
+                        <li
+                          onClick={handleLeftCurrencyChange}
+                          key={currency.ticker}
+                          className={styles.options__item}
+                          id={currency.ticker}
+                          data-name={currency.name}
+                        >
+                          {currency.name}
+                        </li>
+                      ))}
+                </ul>
+              </div>
+            </div>
           </div>
+
           <button className={styles.swap__btn}>
             <img src={swap}></img>
           </button>
+
           <div className={styles.exchange__item}>
             <input
               className={styles.exchange__item_common}
@@ -143,27 +253,68 @@ export const ChangeNow = () => {
             />
 
             {/* правая валюта */}
-            {rightCurrency && (
+            {rightCurrencyTicker && (
               <img
                 src={currencies
-                  .filter((item) => item.ticker === rightCurrency)
+                  .filter((item) => item.ticker === rightCurrencyTicker)
                   .map((item) => item.image)}
                 alt="currency-img"
               />
             )}
 
-            <select
-              className={styles.exchange__item_common}
-              value={rightCurrency}
-              onChange={handleRightCurrencyChange}
-            >
-              <option value="">Сurrency</option>
-              {currencies.map((currency) => (
-                <option key={currency.ticker} value={currency.ticker}>
-                  {currency.name}
-                </option>
-              ))}
-            </select>
+            <div ref={RightSelectRef}>
+              <button
+                title={
+                  selectedRightCurrency
+                    ? selectedRightCurrency
+                    : "click to choose"
+                }
+                onClick={openRightSelectHandler}
+                style={{ width: "100%" }}
+                className={styles.select__button}
+              >
+                {selectedRightCurrency ? selectedRightCurrency : "Currency"}
+              </button>
+              <div style={{ position: "relative" }}>
+                <ul
+                  className={
+                    isRightShowed ? styles.select__options : styles.hidden
+                  }
+                >
+                  <div className={styles.search__select}>
+                    <CiSearch size={25} color="#11b3fe" />
+                    <input
+                      placeholder="Search..."
+                      className={styles.select__input}
+                      onChange={rightSelectSearchHandler}
+                    />
+                  </div>
+                  {rightSearch
+                    ? rightSearch.map((currency) => (
+                        <li
+                          onClick={handleRightCurrencyChange}
+                          key={currency.ticker}
+                          className={styles.options__item}
+                          id={currency.ticker}
+                          data-name={currency.name}
+                        >
+                          {currency.name}
+                        </li>
+                      ))
+                    : currencies.map((currency) => (
+                        <li
+                          onClick={handleRightCurrencyChange}
+                          key={currency.ticker}
+                          className={styles.options__item}
+                          id={currency.ticker}
+                          data-name={currency.name}
+                        >
+                          {currency.name}
+                        </li>
+                      ))}
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -172,7 +323,7 @@ export const ChangeNow = () => {
           <p className={styles.apikey__text}>
             <span>Your </span>
             {currencies
-              .filter((item) => item.ticker === rightCurrency)
+              .filter((item) => item.ticker === rightCurrencyTicker)
               .map((item) => item.name)}
             <span> address for exchange</span>
           </p>
