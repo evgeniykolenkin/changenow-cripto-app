@@ -100,7 +100,7 @@ export const ChangeNow = () => {
     return () => {
       document.removeEventListener("mousedown", closeCustomSelect);
     };
-  });
+  }, []);
 
   useEffect(() => {
     const closeCustomSelect = (e) => {
@@ -114,7 +114,7 @@ export const ChangeNow = () => {
     return () => {
       document.removeEventListener("mousedown", closeCustomSelect);
     };
-  });
+  }, []);
 
   const handleAmountChange = (event) => {
     const amount = parseFloat(event.target.value);
@@ -122,6 +122,9 @@ export const ChangeNow = () => {
   };
 
   const handleLeftCurrencyChange = (e) => {
+    e.stopPropagation();
+    console.log(e.target);
+    console.log(e.target.dataset.name);
     setLeftCurrencyTicker(e.target.id);
     setSelectedLeftCurrency(e.target.dataset.name);
     setIsLeftShowed((prev) => !prev);
@@ -182,6 +185,7 @@ export const ChangeNow = () => {
                   .filter((item) => item.ticker === leftCurrencyTicker)
                   .map((item) => item.image)}
                 alt="currency-img"
+                style={{ marginRight: 10 }}
               />
             )}
 
@@ -193,7 +197,6 @@ export const ChangeNow = () => {
                     : "click to choose"
                 }
                 onClick={openLeftSelectHandler}
-                style={{ width: "100%" }}
                 className={styles.select__button}
               >
                 {selectedLeftCurrency ? selectedLeftCurrency : "Currency"}
@@ -221,6 +224,7 @@ export const ChangeNow = () => {
                           id={currency.ticker}
                           data-name={currency.name}
                         >
+                          <img src={currency.image} />
                           {currency.name}
                         </li>
                       ))
@@ -232,6 +236,7 @@ export const ChangeNow = () => {
                           id={currency.ticker}
                           data-name={currency.name}
                         >
+                          <img src={currency.image} />
                           {currency.name}
                         </li>
                       ))}
@@ -259,6 +264,7 @@ export const ChangeNow = () => {
                   .filter((item) => item.ticker === rightCurrencyTicker)
                   .map((item) => item.image)}
                 alt="currency-img"
+                style={{ marginRight: 10 }}
               />
             )}
 
@@ -270,7 +276,6 @@ export const ChangeNow = () => {
                     : "click to choose"
                 }
                 onClick={openRightSelectHandler}
-                style={{ width: "100%" }}
                 className={styles.select__button}
               >
                 {selectedRightCurrency ? selectedRightCurrency : "Currency"}
@@ -298,6 +303,7 @@ export const ChangeNow = () => {
                           id={currency.ticker}
                           data-name={currency.name}
                         >
+                          <img src={currency.image} />
                           {currency.name}
                         </li>
                       ))
@@ -309,6 +315,7 @@ export const ChangeNow = () => {
                           id={currency.ticker}
                           data-name={currency.name}
                         >
+                          <img src={currency.image} />
                           {currency.name}
                         </li>
                       ))}

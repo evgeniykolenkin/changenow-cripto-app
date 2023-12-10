@@ -45,7 +45,6 @@
 .exchange__item {
   width: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
   border-radius: 5px;
   border: 1px solid #e3ebef;
@@ -80,30 +79,30 @@
 }
 
 .swap__btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 24px;
   height: 24px;
   padding: 14px;
   background: transparent;
   border: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   cursor: pointer;
 }
 
 .select__button {
+  text-align-last: left;
+  position: relative;
+  width: 100%;
+  padding: 0 14px 0 0;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  position: relative;
-  padding-right: 34px;
   font-size: 16px;
   font-weight: 400;
-  /* height: inherit; */
   color: #282828;
   background-color: #f6f7f8;
   border-radius: 5px;
-  border: 1px solid #e3ebef;
   border: none;
   cursor: pointer;
 }
@@ -135,7 +134,7 @@
   max-height: 250px;
   overflow-y: auto;
   margin-top: 5px;
-  padding: 0 8px;
+  padding: 0 4px;
   font-family: Roboto;
   font-size: 16px;
   font-weight: 400;
@@ -144,6 +143,21 @@
   background-color: #f6f7f8;
   border-radius: 5px;
   border: 1px solid #e3ebef;
+}
+
+.select__options::-webkit-scrollbar {
+  width: 8px;
+}
+
+.select__options::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.select__options::-webkit-scrollbar-thumb {
+  background-color: #11b3fe;
+  outline: none;
+  border-radius: 10px;
 }
 
 .search__select {
@@ -157,7 +171,7 @@
 }
 
 .select__input {
-  border-radius: 5px;
+  border-radius: 0 0 5px 5px;
   background-color: #e3ebef;
   border: none;
   padding: 8px;
@@ -171,6 +185,9 @@
 }
 
 .options__item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
   margin-top: 5px;
   padding: 4px;
   color: #282828;
