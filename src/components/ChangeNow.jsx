@@ -123,8 +123,6 @@ export const ChangeNow = () => {
 
   const handleLeftCurrencyChange = (e) => {
     e.stopPropagation();
-    console.log(e.target);
-    console.log(e.target.dataset.name);
     setLeftCurrencyTicker(e.target.id);
     setSelectedLeftCurrency(e.target.dataset.name);
     setIsLeftShowed((prev) => !prev);
@@ -156,6 +154,24 @@ export const ChangeNow = () => {
       currency.name.toLowerCase().includes(e.target.value.toLowerCase())
     );
     setRightSearch(searchList);
+  };
+
+  const swapCurrenciesHandler = () => {
+    let swapSelectedLeft = selectedLeftCurrency;
+    let swapSelectedRight = selectedRightCurrency;
+
+    let leftCurrency = leftCurrencyTicker;
+    let rightCurrency = rightCurrencyTicker;
+
+    setSelectedLeftCurrency(swapSelectedRight);
+    setSelectedRightCurrency(swapSelectedLeft);
+
+    setLeftCurrencyTicker(rightCurrency);
+    setRightCurrencyTicker(leftCurrency);
+  };
+
+  const helpMessageShowHandler = () => {
+    alert("exchange feature is not availible yet");
   };
 
   return (
@@ -245,8 +261,9 @@ export const ChangeNow = () => {
             </div>
           </div>
 
+          {/* кнопка смены левой валюты на правую */}
           <button className={styles.swap__btn}>
-            <img src={swap}></img>
+            <img onClick={swapCurrenciesHandler} src={swap}></img>
           </button>
 
           <div className={styles.exchange__item}>
@@ -337,7 +354,10 @@ export const ChangeNow = () => {
           <div className={styles.exchange__input_btn}>
             <input className={styles.exchange__item} />
             <div>
-              <button className={cn(styles.exchange__btn, styles.btn)}>
+              <button
+                onClick={helpMessageShowHandler}
+                className={cn(styles.exchange__btn, styles.btn)}
+              >
                 Exchange
               </button>
               {errorMessage && <p>{errorMessage}</p>}

@@ -71,56 +71,6 @@
   width: 30%;
 }
 
-/* buttons */
-
-.btn {
-  border: none;
-  cursor: pointer;
-}
-
-.swap__btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 24px;
-  height: 24px;
-  padding: 14px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-}
-
-.select__button {
-  text-align-last: left;
-  position: relative;
-  width: 100%;
-  padding: 0 14px 0 0;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  font-size: 16px;
-  font-weight: 400;
-  color: #282828;
-  background-color: #f6f7f8;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-}
-
-.select__button::after {
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  content: "";
-  display: inline-block;
-  width: 0;
-  height: 0;
-  border-width: 10.4px 6px 0 6px;
-  border-color: #798498 transparent transparent transparent;
-  border-style: solid;
-}
-
 .hidden {
   display: none;
 }
@@ -202,6 +152,56 @@
   color: #fff;
 }
 
+/* ? buttons */
+
+.btn {
+  border: none;
+  cursor: pointer;
+}
+
+.swap__btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 14px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.select__button {
+  text-align-last: left;
+  position: relative;
+  width: 100%;
+  padding: 0 14px 0 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: 400;
+  color: #282828;
+  background-color: #f6f7f8;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.select__button::after {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  content: "";
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-width: 10.4px 6px 0 6px;
+  border-color: #798498 transparent transparent transparent;
+  border-style: solid;
+}
+
 .exchange__btn {
   padding: 15px;
   border-radius: 5px;
@@ -213,6 +213,11 @@
   line-height: 19.2px;
   letter-spacing: 0.48px;
   text-transform: uppercase;
+}
+
+.exchange__btn:hover {
+  background-color: #798498;
+  cursor: help;
 }
 
 .apikey__exchange_wrapper {
