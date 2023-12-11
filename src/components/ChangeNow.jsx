@@ -171,7 +171,7 @@ export const ChangeNow = () => {
   };
 
   const helpMessageShowHandler = () => {
-    alert("exchange feature is not availible yet");
+    alert("exchange feature is not available yet");
   };
 
   return (
